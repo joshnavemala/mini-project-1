@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>E-Commerce Product Catalog</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+margin:0;
+background:#f2f2f2;
+}
+
+.container{
+display:flex;
+padding:20px;
+gap:20px;
+}
+
+.filters{
+width:250px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.filters h2{
+margin-top:0;
+}
+
+.filters label{
+display:block;
+margin-top:15px;
+font-weight:bold;
+}
+
+.filters select,
+.filters input{
+width:100%;
+padding:8px;
+margin-top:5px;
+}
+
+.products{
+flex:1;
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h3{
+margin-top:0;
+}
+
+.price{
+color:green;
+font-size:20px;
+font-weight:bold;
+}
+
+.rating{
+color:orange;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="filters">
+
+<h2>Filters</h2>
+
+<label>Brand</label>
+
+<select id="brandFilter">
+
+<option value="all">All</option>
+<option value="Nike">Nike</option>
+<option value="Adidas">Adidas</option>
+<option value="Puma">Puma</option>
+
+</select>
+
+<label>Max Price</label>
+
+<input type="range"
+id="priceFilter"
+min="1000"
+max="10000"
+value="10000">
+
+<p>₹ <span id="priceValue">10000</span></p>
+
+<label>Minimum Rating</label>
+
+<select id="ratingFilter">
+
+<option value="0">All</option>
+<option value="3">3+</option>
+<option value="4">4+</option>
+<option value="5">5</option>
+
+</select>
+
+</div>
+
+<div class="products" id="productList">
+
+</div>
+
+</div>
+
+
+<script>
+
+const products=[
+
+{
+name:"Nike Running Shoes",
+brand:"Nike",
+price:5000,
+rating:4
+},
+
+{
+name:"Adidas T-Shirt",
+brand:"Adidas",
+price:2500,
+rating:5
+},
+
+{
+name:"Puma Sneakers",
+brand:"Puma",
+price:4000,
+rating:3
+},
+
+{
+name:"Nike Jacket",
+brand:"Nike",
+price:7000,
+rating:5
+},
+
+{
+name:"Adidas Shoes",
+brand:"Adidas",
+price:6000,
+rating:4
+}
+
+];
+
+
+const productList=
+document.getElementById("productList");
+
+function displayProducts(items){
+
+productList.innerHTML="";
+
+if(items.length===0){
+
+productList.innerHTML=
+"<h2>No Products Found</h2>";
+
+return;
+
+}
+
+items.forEach(product=>{
+
+productList.innerHTML+=`
+
+<div class="card">
+
+<h3>${product.name}</h3>
+
+<p>Brand: ${product.brand}</p>
+
+<p class="price">
+₹${product.price}
+</p>
+
+<p class="rating">
+⭐ ${product.rating}
+</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+function filterProducts(){
+
+const brand=
+document.getElementById("brandFilter").value;
+
+const price=
+document.getElementById("priceFilter").value;
+
+const rating=
+document.getElementById("ratingFilter").value;
+
+document.getElementById(
+"priceValue"
+).innerText=price;
+
+
+const filtered=
+products.filter(product=>{
+
+return(
+
+(brand==="all" ||
+product.brand===brand)
+
+&&
+
+product.price<=price
+
+&&
+
+product.rating>=rating
+
+);
+
+});
+
+displayProducts(filtered);
+
+}
+
+
+document.getElementById(
+"brandFilter"
+).addEventListener(
+"change",
+filterProducts
+);
+
+document.getElementById(
+"priceFilter"
+).addEventListener(
+"input",
+filterProducts
+);
+
+document.getElementById(
+"ratingFilter"
+).addEventListener(
+"change",
+filterProducts
+);
+
+
+displayProducts(products);
+
+</script>
+
+</body>
+</html>
